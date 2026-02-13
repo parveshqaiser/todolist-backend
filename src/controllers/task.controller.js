@@ -5,8 +5,6 @@ const createTask = async(req, res)=>{
     try {
         let {userId, title, description, status, priority, dueDate} = req.body;
 
-        console.log("****** ", req.body);
-
         let task = await TaskModel.create({
             userId,
             title,
@@ -85,9 +83,6 @@ const deleteTask = async(req, res)=>{
         } 
 
         let delTask = await TaskModel.findByIdAndDelete(id);
-
-        console.log("deleted ", delTask);
-
         if(!delTask){
             return res.status(400).json({
                 message: "Some Error in Deleting Task. Try Again Later",
