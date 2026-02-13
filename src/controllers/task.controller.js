@@ -23,7 +23,6 @@ const createTask = async(req, res)=>{
     }
 }
 
-
 // only the logged in user , it will give an array of task.
 const getUserTask = async(req, res)=>{
 
