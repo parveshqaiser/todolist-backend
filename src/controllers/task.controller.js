@@ -29,7 +29,6 @@ const getUserTask = async(req, res)=>{
     try {
         let id = req.params.id;
 
-        console.log("id ",id);
         let allTask = await TaskModel.find({userId:id});
 
 

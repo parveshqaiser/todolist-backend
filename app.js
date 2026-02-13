@@ -5,11 +5,12 @@ import dbConnection from "./src/database/db.js";
 import userRoutes from "./src/routes/user.routes.js";
 import taskRoutes from "./src/routes/task.routes.js";
 import dotenv from "dotenv";
-
+import cookieParser from "cookie-parser";
 const app = express();
-let PORT = 9000;;
+let PORT = 9000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 dotenv.config({
     path : "./.env",
@@ -32,7 +33,7 @@ dbConnection().then(()=>{
         console.log(`Server is running at http://localhost:${PORT}`)
     });
 
-}).catch((err)=>{
-    console.log("Some error in connecting DB ", err);
+}).catch((error)=>{
+    console.log("Some error in connecting DB ", error);
 })
 
