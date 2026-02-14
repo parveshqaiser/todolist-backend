@@ -76,18 +76,22 @@ const userLogin = async(req,res)=>{
         user.refreshToken = refreshToken;
 
         await user.save();
+        let data = {
+            username : user.username,
+            fullName : user.fullName,
+        };
 
         res.cookie("token", accessToken, { 
             sameSite : "strict",
             secure: true,
             httpOnly:true, 
         }).status(200).json({
-            message : "Login Successfull", 
+            message : "Login Successfull",
+            data, 
             success : true,
             accessToken , 
             refreshToken
         });
-
 
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message, success: false });
@@ -96,7 +100,8 @@ const userLogin = async(req,res)=>{
 
 const getUserDetail = async(req,res)=>{
     try {
-        let id = req.params.id;
+        // let id = req.params.id;
+        let id = req.user;
 
         let user = await UserModel.findOne({_id:id}).select("-password");
 
@@ -113,7 +118,6 @@ const getUserDetail = async(req,res)=>{
         res.status(500).json({message: error.message || "Server Error"});
     }
 }
-
 
 const updateUser = async(req,res)=>{
     try {
@@ -136,27 +140,45 @@ const updateUser = async(req,res)=>{
         res.status(200).json({message :" User Profile Updated", data : user , success: true});
 
     } catch (error) {
-          res.status(500).json({ message: "Server Error", error: error.message, success: false });
+        res.status(500).json({ message: "Server Error", error: error.message, success: false });
     }
 }
 
-
-
-export {userRegistration, userLogin, getUserDetail, updateUser};
-
-/*
-const getTaskOfUserUsingPopulate = async(req, res)=>{
+const userLogout = async(req,res)=>{
     try {
-        let id = req.params.id;
-        console.log("id *************", id)
-        let userExist = await TaskModel.find({userId:id}).populate("userId");
-        console.log("user exost ", userExist);
+        let id = req.user;
 
-        res.status(200).json({message : "user fetched ", data : userExist, suceess : true});
+        let user = await UserModel.findOne({_id:id});
+
+        if(!user){
+            return res.status(400).json({
+                message : "User Does Not Exist",
+                suceess : false
+            });
+        };
+
+        await UserModel.findByIdAndUpdate(id, {$set: {refreshToken:""}});
+
+        // clear the cookie the way you set during login time
+        res.status(200).clearCookie("token",{
+            sameSite: "strict",
+            secure: true,
+            httpOnly: true,
+        })
+        .json({
+            message: "User Logout Success",
+            success: true
+        });
 
     } catch (error) {
-        res.status(500).json({message: error.message || "Server Error"});
+        res.status(500).json({ message: "Server Error", error: error.message, success: false });
     }
 }
 
-*/
+export {
+    userRegistration, 
+    userLogin, 
+    getUserDetail, 
+    updateUser, 
+    userLogout
+};
