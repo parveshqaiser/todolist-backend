@@ -5,7 +5,7 @@ import userRoutes from "./src/routes/user.routes.js";
 import taskRoutes from "./src/routes/task.routes.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 
 const app = express();
 let PORT = 9000;
@@ -16,6 +16,13 @@ app.use(cookieParser());
 dotenv.config({
     path : "./.env",
 });
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods : ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}));
 
 app.use("/api/v1/user",userRoutes);
 app.use("/api/v1/task",taskRoutes);

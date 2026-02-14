@@ -40,6 +40,13 @@ const userLogin = async(req,res)=>{
     try {
         let {username, password} = req.body;
 
+        if(!username || !password){
+            return res.status(400).json({
+                message: "All fields are required",
+                suceess : false
+            });
+        }
+
         let user = await UserModel.findOne({username});
 
         if(!user){
@@ -132,6 +139,8 @@ const updateUser = async(req,res)=>{
           res.status(500).json({ message: "Server Error", error: error.message, success: false });
     }
 }
+
+
 
 export {userRegistration, userLogin, getUserDetail, updateUser};
 

@@ -83,6 +83,7 @@ const deleteTask = async(req, res)=>{
         } 
 
         let delTask = await TaskModel.findByIdAndDelete(id);
+        
         if(!delTask){
             return res.status(400).json({
                 message: "Some Error in Deleting Task. Try Again Later",
