@@ -25,14 +25,25 @@ const createTask = async(req, res)=>{
 const getUserTask = async(req, res)=>{
 
     try {
-        let id = req.params.id;
+        let id = req.user;
 
         let allTask = await TaskModel.find({userId:id});
 
+        return res.status(200).json({
+            message: allTask.length 
+                ? "Tasks fetched successfully" 
+                : "No tasks found",
+            success: true,
+            count: allTask.length,
+            data: allTask
+        });
 
-        res.status(200).json({message : "Data Fetched", success :true , data : allTask});
     } catch (error) {
-        res.status(500).json({ message: "Server Error", error: error.message, success: false });
+        res.status(500).json({ 
+            message: "Server Error", 
+            error: error.message, 
+            success: false 
+        });
     }
 };
 
