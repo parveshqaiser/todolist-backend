@@ -19,7 +19,7 @@ const todoSchema = new mongoose.Schema({
         required: true,
         default: "Pending",
         enum: {
-            values: ["Pending", "In-Progress", "Done"],
+            values: ["Pending", "In-Progress", "Completed"],
             message: `{VALUE} is not a valid status`
         }
     },

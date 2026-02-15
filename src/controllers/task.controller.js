@@ -56,7 +56,7 @@ const updateTask = async(req, res)=>{
 
         let findTask = await TaskModel.findOne({_id:id});
 
-        if(!["Pending", "In-Progress", "Done"].includes(status)){
+        if(!["Pending", "In-Progress", "Completed"].includes(status)){
             return res.status(400).json({
                 message: "Invalid Status",
                 suceess : false

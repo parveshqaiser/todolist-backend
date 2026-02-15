@@ -65,7 +65,7 @@ const userLogin = async(req,res)=>{
 
         let accessToken = jwt.sign({id:user._id,username : user.username},
             process.env.SECRET_KEY,
-            {expiresIn:"5m"},
+            {expiresIn:"1h"},
         );
 
         let refreshToken = jwt.sign({id:user._id,username : user.username},
@@ -219,7 +219,7 @@ const genereateAccessToken = async(req, res)=>{
 
         let newAccessToken = jwt.sign({id:user._id,username : user.username},
             process.env.SECRET_KEY,
-            {expiresIn:"5m"},
+            {expiresIn:"1h"},
         );
 
         res.status(200).cookie("token",newAccessToken,{
