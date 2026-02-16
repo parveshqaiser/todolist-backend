@@ -14,6 +14,13 @@ const userRegistration = async(req, res)=>{
             });
         }
 
+        if(password && password.length <5){
+            return res.status(400).json({
+                message: "Password min 6 chars",
+                suceess : false
+            });
+        }
+
         let userExist = await UserModel.findOne({username});
 
         if(userExist){
@@ -29,7 +36,7 @@ const userRegistration = async(req, res)=>{
             password
         });
         
-        res.status(200).json({message : "User Registration Successfull ", suceess : true});
+        res.status(201).json({message : "User Registration Successfull ", suceess : true});
 
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message, success: false });

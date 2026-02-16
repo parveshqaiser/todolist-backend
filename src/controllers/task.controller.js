@@ -1,10 +1,18 @@
 
 import TaskModel from "../models/task.model.js";
+import checkValidation from "../utils/validation.js";
 
 const createTask = async(req, res)=>{
     try {
-        let {userId, title, description, status, priority, dueDate} = req.body;
-        let id = req.user;
+        let {title, description, status, priority, dueDate} = req.body;
+
+        let errorMessage = checkValidation(title, dueDate);
+
+        if(errorMessage){
+            return res.status(400).json({message : errorMessage , success :false})
+        }
+
+        let id = req.user; // user id
 
         let task = await TaskModel.create({
             userId : id,
@@ -26,7 +34,7 @@ const createTask = async(req, res)=>{
 const getUserTask = async(req, res)=>{
 
     try {
-        let id = req.user;
+        let id = req.user;  // user id
 
         let allTask = await TaskModel.find({userId:id});
 
@@ -51,9 +59,14 @@ const getUserTask = async(req, res)=>{
 
 const updateTask = async(req, res)=>{
     try {
-        let id = req.params.id;
+        let id = req.params.id; // task id
 
         let {title,description,status, priority, dueDate} = req.body;
+        let errorMessage = checkValidation(title, dueDate);
+
+        if(errorMessage){
+            return res.status(400).json({message : errorMessage , success :false})
+        }
 
         let findTask = await TaskModel.findOne({_id:id});
 
@@ -83,7 +96,7 @@ const updateTask = async(req, res)=>{
 
 const deleteTask = async(req, res)=>{
     try {
-        let id = req.params.id;
+        let id = req.params.id; // task id
 
         let findTask = await TaskModel.findOne({_id:id});
 
