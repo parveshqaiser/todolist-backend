@@ -72,12 +72,12 @@ const userLogin = async(req,res)=>{
 
         let accessToken = jwt.sign({id:user._id,username : user.username},
             process.env.SECRET_KEY,
-            {expiresIn:"1h"},
+            {expiresIn:"10m"},
         );
 
         let refreshToken = jwt.sign({id:user._id,username : user.username},
             process.env.REFRESH_TOKEN_SECRET_KEY,
-            {expiresIn:"1d"},
+            {expiresIn:"1h"},
         );
 
         user.refreshToken = refreshToken;

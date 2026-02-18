@@ -17,7 +17,7 @@ const createTask = async(req, res)=>{
         let task = await TaskModel.create({
             userId : id,
             title,
-            description, 
+            description : description || "", 
             status, 
             priority, 
             dueDate
