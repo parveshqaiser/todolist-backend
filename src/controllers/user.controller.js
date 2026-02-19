@@ -81,8 +81,10 @@ const userLogin = async(req,res)=>{
         );
 
         user.refreshToken = refreshToken;
+        user.lastLogin = new Date().toLocaleDateString();
 
         await user.save();
+
         let data = {
             username : user.username,
             fullName : user.fullName,
@@ -229,6 +231,9 @@ const genereateAccessToken = async(req, res)=>{
             {expiresIn:"1h"},
         );
 
+        user.lastLogin = new Date().toLocaleDateString();
+        await user.save();
+        
         res.status(200).cookie("token",newAccessToken,{
             sameSite : "strict",
             secure: true,

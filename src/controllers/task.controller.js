@@ -36,7 +36,7 @@ const getUserTask = async(req, res)=>{
     try {
         let id = req.user;  // user id
 
-        let allTask = await TaskModel.find({userId:id});
+        let allTask = await TaskModel.find({userId:id}).sort({createdAt:-1});
 
         return res.status(200).json({
             message: allTask.length 
@@ -84,7 +84,18 @@ const updateTask = async(req, res)=>{
             });
         }
 
-        Object.keys(req.body).forEach(val => findTask[val] = req.body[val]);
+        if(status == "Pending" || status == "In-Progress"){
+            Object.keys(req.body).forEach(val => findTask[val] = req.body[val]);
+        }else if(status == "Completed"){
+            findTask.title = title;
+            findTask.description = description;
+            findTask.status = status; 
+            findTask.priority= priority; 
+            findTask.dueDate = dueDate;
+            findTask.completedOn = new Date().toISOString().split("T")[0];
+            findTask.isCompleted = true;
+        }
+      
         await findTask.save();
 
         res.status(201).json({message : "Task Updated", success : true , data : findTask});
