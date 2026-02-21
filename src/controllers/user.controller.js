@@ -193,7 +193,7 @@ const genereateAccessToken = async(req, res)=>{
     try {
         let incomingRefreshToken = req.cookies?.refreshToken;
 
-        console.log("incomingRefreshToken ", incomingRefreshToken);
+        // console.log("incomingRefreshToken ", incomingRefreshToken);
 
         if (!incomingRefreshToken) {
             return res.status(401).json({
@@ -217,7 +217,7 @@ const genereateAccessToken = async(req, res)=>{
         }
 
         let user = await UserModel.findOne({_id: verifyToken.id}).select("-password");
-        console.log("user ", user);
+        // console.log("user ", user);
 
         if(!user){
             return res.status(404).json({message : "User Doesnot Exists" , succcess : false});
