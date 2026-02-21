@@ -38,13 +38,25 @@ const getUserTask = async(req, res)=>{
 
         let allTask = await TaskModel.find({userId:id}).sort({createdAt:-1});
 
+        let completedTask = allTask?.length && allTask.filter(task => task.status == "Completed" && task.completedOn <= task.dueDate);
+
+        let onTimePercentage = (completedTask.length / allTask.length) * 100;
+
+        let missedTask = allTask?.length && allTask.filter(t => {
+            return (t.status != "Completed")  && t.dueDate < new Date().toISOString().split("T")[0] })
+
+        // res.status(200).json({message : "data fetched", completedTask, onTimePercentage});
+
         return res.status(200).json({
             message: allTask.length 
                 ? "Tasks fetched successfully" 
                 : "No tasks found",
             success: true,
             count: allTask.length,
-            data: allTask
+            data: allTask,
+            onTimePercentage,
+            lastTaskCreated : allTask[0],            
+            missedTask : missedTask.length || 0
         });
 
     } catch (error) {

@@ -81,6 +81,7 @@ const userLogin = async(req,res)=>{
         );
 
         user.refreshToken = refreshToken;
+        user.previousLogin = user.lastLogin;
         user.lastLogin = new Date().toLocaleDateString();
 
         await user.save();
@@ -233,7 +234,7 @@ const genereateAccessToken = async(req, res)=>{
 
         user.lastLogin = new Date().toLocaleDateString();
         await user.save();
-        
+
         res.status(200).cookie("token",newAccessToken,{
             sameSite : "strict",
             secure: true,
